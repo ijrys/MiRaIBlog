@@ -23,10 +23,10 @@ namespace Demo {
 		static void Main(string[] args) {
 			Thread th1 = new Thread(new ParameterizedThreadStart(DoFun));
 			Thread th2 = new Thread(new ParameterizedThreadStart(DoFun));
+			Console.WriteLine("Start");
 			th1.Start("张三");
 			Thread.Sleep(20);
 			th2.Start("李四");
-
 
 			Console.ReadLine();
 		}
