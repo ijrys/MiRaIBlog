@@ -49,8 +49,22 @@ namespace MiRaI.Blog.CoreVer.Models {
 			return true;
 		}
 
-		public int[] GetHistory () {
+		public int[] GetHistoryID () {
+			return MiRaI.Blog.CoreVer.ToolsModels.SqlTools.AGetHistoryID(this.ArticleID);
+		}
+
+		public ArticleContent[] GetHistory () {
 			return MiRaI.Blog.CoreVer.ToolsModels.SqlTools.AGetHistory(this.ArticleID);
+		}
+		#endregion
+
+		#region 构造函数
+		public Article (int artid) {
+			_articleID = artid;
+		}
+
+		public Article (int artid, int ownid, int contentid, Int16 state) : this(artid) {
+			Init(ownid, contentid, state);
 		}
 		#endregion
 	}

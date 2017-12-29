@@ -243,7 +243,7 @@ namespace MiRaI.Blog.CoreVer.ToolsModels {
 			}
 		}
 
-		public static int[] AGetHistory (int artid) {
+		public static int[] AGetHistoryID(int artid) {
 			//EXECUTE [dbo].[GetArticleHistory] 1
 			if (Blogmanageconnstr == null) return null;
 			SqlConnection conn = null;
@@ -257,6 +257,33 @@ namespace MiRaI.Blog.CoreVer.ToolsModels {
 					List<int> res = new List<int>();
 					while (reader.Read()) {
 						res.Add(int.Parse(reader["ContentID"].ToString()));
+					}
+
+					return res.ToArray();
+				}
+			}
+		}
+		public static ArticleContent[] AGetHistory(int artid) {
+			//EXECUTE [dbo].[GetArticleHistory] 1
+			if (Blogmanageconnstr == null) return null;
+			SqlConnection conn = null;
+			conn = new SqlConnection(Blogmanageconnstr);
+
+			using (SqlCommand cmd = conn.CreateCommand()) {
+				cmd.CommandText = "EXECUTE [dbo].[GetArticleHistory] @artid";
+				cmd.Parameters.AddWithValue("@artid", artid);
+				conn.Open();
+				using (SqlDataReader reader = cmd.ExecuteReader()) {
+					List<ArticleContent> res = new List<ArticleContent>();
+					while (reader.Read()) {
+						//ContentID Title FileName CreateDate CreateRea State
+						int contid = int.Parse(reader["ContentID"].ToString());
+						string title = reader["Title"].ToString();
+						string fname = reader["FileName"].ToString();
+						DateTime cdate = DateTime.Parse(reader["CreateDate"].ToString());
+						short crea = short.Parse(reader["CreateRea"].ToString());
+						short state = short.Parse(reader["State"].ToString());
+						res.Add(new ArticleContent(contid, artid, title, fname, crea, cdate, state));
 					}
 
 					return res.ToArray();
