@@ -189,6 +189,29 @@ namespace MiRaI.Blog.CoreVer.ToolsModels {
 		}
 
 		#region 文章相关
+		public static bool AInitAArticle (Article article) {
+			if (article == null || article.ArticleID < 1) return false;
+			if (Blogmanageconnstr == null) return false;
+			SqlConnection conn = null;
+			conn = new SqlConnection(Blogmanageconnstr);
+
+			using (SqlCommand cmd = conn.CreateCommand()) {
+				cmd.CommandText = "select [UserID], [State], [LastContentID] from [dbo].[ArticleSet] where [Delflag] = 0 and [ArticleID] = @artid";
+				cmd.Parameters.AddWithValue("@artid", article.ArticleID);
+				conn.Open();
+				using (SqlDataReader reader = cmd.ExecuteReader()) {
+					if (!reader.HasRows) return false;
+
+					reader.Read();
+					int oid = int.Parse(reader["UserID"].ToString());
+					int lcid = int.Parse(reader["LastContentID"].ToString());
+					Int16 state = Int16.Parse(reader["State"].ToString());
+
+					return article.Init(oid, lcid, state);
+				}
+			}
+		}
+
 		/// <summary>
 		/// 初始化一个文章内容块
 		/// </summary>
@@ -216,6 +239,27 @@ namespace MiRaI.Blog.CoreVer.ToolsModels {
 					Int16 state = Int16.Parse(reader["State"].ToString());
 
 					return content.Init(aid, tit, fname, crea, cdate, state);
+				}
+			}
+		}
+
+		public static int[] AGetHistory (int artid) {
+			//EXECUTE [dbo].[GetArticleHistory] 1
+			if (Blogmanageconnstr == null) return null;
+			SqlConnection conn = null;
+			conn = new SqlConnection(Blogmanageconnstr);
+
+			using (SqlCommand cmd = conn.CreateCommand()) {
+				cmd.CommandText = "EXECUTE [dbo].[GetArticleHistory] @artid";
+				cmd.Parameters.AddWithValue("@artid", artid);
+				conn.Open();
+				using (SqlDataReader reader = cmd.ExecuteReader()) {
+					List<int> res = new List<int>();
+					while (reader.Read()) {
+						res.Add(int.Parse(reader["ContentID"].ToString()));
+					}
+
+					return res.ToArray();
 				}
 			}
 		}

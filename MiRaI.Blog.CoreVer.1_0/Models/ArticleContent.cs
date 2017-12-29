@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using MiRaI.Blog.CoreVer.ToolsModels;
 
 namespace MiRaI.Blog.CoreVer.Models {
-	public class ArticleContent {
+	public class ArticleContent: IComparable<ArticleContent>, IEquatable<ArticleContent> {
 		/// <summary>
 		/// 存储content文件所在文件夹
 		/// </summary>
@@ -116,8 +116,8 @@ namespace MiRaI.Blog.CoreVer.Models {
 			_needInit = false;
 			return true;
 		}
-
 		#endregion
+
 		#region 构造函数
 		public ArticleContent(int countid) {
 			_contentID = countid;
@@ -125,7 +125,23 @@ namespace MiRaI.Blog.CoreVer.Models {
 
 		public ArticleContent(int countid, int articleid, string title, string savefile, Int16 createrea, DateTime createdate, Int16 state) : this(countid) {
 			Init(articleid, title, savefile, createrea, createdate, state);
-		} 
+		}
+		#endregion
+
+		#region 功能相关
+		public int CompareTo(ArticleContent other) {
+			return ContentID - other.ContentID;
+		}
+
+		public bool Equals(ArticleContent other) {
+			return (_contentID == other._contentID &&
+					_articleID == other._articleID &&
+					_title == other._title &&
+					_saveFile == other._saveFile &&
+					_createRea == other._createRea &&
+					_createDate == other._createDate &&
+					_state == other._state);
+		}
 		#endregion
 	}
 }
