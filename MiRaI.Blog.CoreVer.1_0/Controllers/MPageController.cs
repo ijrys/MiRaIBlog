@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +10,9 @@ using MiRaI.Blog.CoreVer._1_0.Models;
 namespace MiRaI.Blog.CoreVer._1_0.Controllers {
 	public class MPageController: Controller {
 		public IActionResult Index() {
+			string showstr = "[empty]";
+			showstr = ConfigurationManager.ConnectionStrings["usercheckcr"]?.ConnectionString;
+			ViewBag.constr = showstr;
 			return View();
 		}
 

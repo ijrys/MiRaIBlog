@@ -1,0 +1,13 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace MiRaI.Blog.CoreVer.Models {
+	public class Article {
+		int _articleID;
+		int _ownerID;
+		int _contentID;
+
+	}
+}
