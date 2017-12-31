@@ -62,7 +62,8 @@ namespace MiRaI.Blog.CoreVer._1_0.Controllers {
 }
 */
 			Response.ContentType = "application/json";
-			Article art = new Article()
+			Article art = new Article(artid);
+			return null;
 		}
 	}
 }
